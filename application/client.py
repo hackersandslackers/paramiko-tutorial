@@ -1,3 +1,4 @@
+"""Remote host object."""
 from paramiko import SSHClient, AutoAddPolicy, RSAKey
 from paramiko.auth_handler import AuthenticationException
 from scp import SCPClient, SCPException
@@ -5,7 +6,7 @@ from io import StringIO
 
 
 class Client:
-    """SSH Client class."""
+    """Remote host SSH client."""
 
     def __init__(self, config):
         self.remote_url = config.remote_url
@@ -33,13 +34,14 @@ class Client:
                                username=self.remote_user,
                                pkey=self.pkey)
             except AuthenticationException:
-                raise AuthenticationException('Authentication failed: did you remember to create an SSH key?')
+                raise AuthenticationException('Authentication failed: '
+                                              'did you remember your SSH key?')
             finally:
                 return client
         return self.client
 
     def upload(self, file, remote_directory):
-        """Upload a single file to a remote directory"""
+        """Upload a single file to a remote directory."""
         self.client = self.__connect()
         scp = SCPClient(self.client.get_transport())
         try:
@@ -52,7 +54,7 @@ class Client:
             scp.close()
 
     def execute(self, cmd):
-        """Executes a single unix command."""
+        """Execute a single unix command."""
         self.client = self.__connect()
         stdin, stdout, stderr = self.client.exec_command(cmd)
         return stdout.readlines()

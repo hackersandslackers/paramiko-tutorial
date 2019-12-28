@@ -1,8 +1,10 @@
+"""Initiate remote host."""
 import os
 from .client import Client
 
 
 def upload(Config):
+    """Upload local files to remote host."""
     client = Client(Config)
     local_files = os.walk(os.path.abspath(Config.local_files))
     for root, dirs, files in local_files:

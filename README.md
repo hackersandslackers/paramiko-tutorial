@@ -28,10 +28,19 @@ Alternatively, try installing via `setup.py`:
 
 ```shell
 $ git clone https://github.com/hackersandslackers/paramiko-tutoral.git
-$ cd django-intro-tutorial
+$ cd paramiko-tutorial
 $ python3 setup.py install
 $ python3 main.py
 ```
+
+The following environment variables are required to run this script:
+
+* `REMOTE_HOST`: IP address or URL of remote host.
+* `REMOTE_USERNAME`: Username for remote host.
+* `REMOTE_PASSPHRASE`: Password for remote host.
+* `REMOTE_SSH_KEY`: /path/to/remote/host/sshkey.pem
+
+
 -----
 
 **Hackers and Slackers** tutorials are free of charge. If you found this tutorial helpful, a [small donation](https://www.buymeacoffee.com/hackersslackers) would be greatly appreciated to keep us in business. All proceeds go towards coffee, and all coffee goes towards more content.
