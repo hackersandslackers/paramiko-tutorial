@@ -5,6 +5,7 @@ from io import StringIO
 
 
 class Client:
+    """SSH Client class."""
 
     def __init__(self, config):
         self.remote_url = config.remote_url
@@ -14,7 +15,7 @@ class Client:
         self.client = None
 
     def __get_ssh_key(self):
-        """Get our SSh key."""
+        """Get our SSH key."""
         f = open(self.remote_ssh_key, 'r')
         s = f.read()
         keyfile = StringIO(s)

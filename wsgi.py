@@ -1,3 +1,4 @@
+"""Entry point."""
 from application import upload
 from config import Config
 

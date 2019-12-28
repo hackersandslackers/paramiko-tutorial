@@ -7,8 +7,8 @@ verify_ssl = true
 PyTest = "*"
 
 [packages]
-scp = "*"
-paramiko = "*"
+Paramiko = "*"
+SCP = "*"
 
 [requires]
 python_version = "3.7"
