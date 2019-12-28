@@ -8,6 +8,30 @@
 [![GitHub Stars](https://img.shields.io/github/stars/hackersandslackers/paramiko-tutorial.svg?style=flat-square8&colorA=4c566a&logo=GitHub&colorB=ebcb8b)](https://github.com/hackersandslackers/paramiko-tutorial/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/hackersandslackers/paramiko-tutorial.svg?style=flat-square&colorA=4c566a&logo=GitHub&colorB=ebcb8b)](https://github.com/hackersandslackers/paramiko-tutorial/network)
 
-![Paramiko Tutorial](https://storage.googleapis.com/hackersandslackers-cdn/2019/10/paramiko@2x.jpg)
+![Paramiko Tutorial](https://res-3.cloudinary.com/hackers/image/upload/q_auto:best/v1/2019/12/paramiko.jpg)
 
 Source code for the accompanying tutorial found here: https://hackersandslackers.com/ssh-scp-in-python-with-paramiko/
+
+## Getting Started
+
+Installation is recommended with Pipenv:
+
+```shell
+$ git clone https://github.com/hackersandslackers/paramiko-tutoral.git
+$ cd django-intro-tutorial
+$ pipenv shell
+$ pipenv update
+$ python3 main.py
+```
+
+Alternatively, try installing via `setup.py`:
+
+```shell
+$ git clone https://github.com/hackersandslackers/paramiko-tutoral.git
+$ cd django-intro-tutorial
+$ python3 setup.py install
+$ python3 main.py
+```
+-----
+
+**Hackers and Slackers** tutorials are free of charge. If you found this tutorial helpful, a [small donation](https://www.buymeacoffee.com/hackersslackers) would be greatly appreciated to keep us in business. All proceeds go towards coffee, and all coffee goes towards more content.
