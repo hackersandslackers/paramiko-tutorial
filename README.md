@@ -18,7 +18,7 @@ Installation is recommended with Pipenv:
 
 ```shell
 $ git clone https://github.com/hackersandslackers/paramiko-tutoral.git
-$ cd django-intro-tutorial
+$ cd paramiko-tutorial
 $ pipenv shell
 $ pipenv update
 $ python3 main.py
@@ -29,16 +29,15 @@ Alternatively, try installing via `setup.py`:
 ```shell
 $ git clone https://github.com/hackersandslackers/paramiko-tutoral.git
 $ cd paramiko-tutorial
-$ python3 setup.py install
-$ python3 main.py
+$ python3 setup.py run
 ```
 
 The following environment variables are required to run this script:
 
 * `REMOTE_HOST`: IP address or URL of remote host.
 * `REMOTE_USERNAME`: Username for remote host.
-* `REMOTE_PASSPHRASE`: Password for remote host.
-* `REMOTE_SSH_KEY`: /path/to/remote/host/sshkey.pem
+* `SSH_KEY`: /path/to/remote/host/sshkey.pem
+* `REMOTE_PATH` _(optional)_: Remote directory to serve as destination for file uploads.
 
 
 -----

@@ -1,12 +1,9 @@
 """Configuration module."""
 from os import environ
 
+host = environ.get('REMOTE_HOST')
+user = environ.get('REMOTE_USERNAME')
+ssh_key_filepath = environ.get('SSH_KEY')
+remote_path = environ.get('REMOTE_PATH')
 
-class Config:
-    """Class-based config."""
-
-    remote_url = environ.get('REMOTE_HOST')
-    remote_user = environ.get('REMOTE_USERNAME')
-    remote_passphrase = environ.get('REMOTE_PASSPHRASE')
-    remote_ssh_key = environ.get('REMOTE_SSH_KEY')
-    local_files = 'data'
+local_file_directory = 'data'

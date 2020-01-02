@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ee0cec544220af713efdc49fbed9245d8430a5d87d2910ef74cba94913ad5e35"
+            "sha256": "e80d4c59c9c5d293571f36d68f1110f00a97b4c448d7e67cac8b7efa55924583"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -102,6 +102,14 @@
                 "sha256:fb81c17e0ebe3358486cd8cc3ad78adbae58af12fc2bf2bc0bb84e8090fa5ce8"
             ],
             "version": "==2.8"
+        },
+        "loguru": {
+            "hashes": [
+                "sha256:6e3e8d865201f5a301a4eb7563f4c9e979d80fbe6f6fa919b3e3a7e095106c7b",
+                "sha256:d5ddf363b7e0e562652f283f74a89bf35601baf16b70f2cd2736a2f8c6638748"
+            ],
+            "index": "pypi",
+            "version": "==0.4.0"
         },
         "paramiko": {
             "hashes": [
@@ -227,10 +235,9 @@
         },
         "wcwidth": {
             "hashes": [
-                "sha256:3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e",
-                "sha256:f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"
+                "sha256:8fd29383f539be45b20bd4df0dc29c20ba48654a41e661925e612311e9f3c603"
             ],
-            "version": "==0.1.7"
+            "version": "==0.1.8"
         },
         "zipp": {
             "hashes": [

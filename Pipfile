@@ -9,6 +9,7 @@ PyTest = "*"
 [packages]
 Paramiko = "*"
 SCP = "*"
+Loguru = "*"
 
 [requires]
 python_version = "3.7"

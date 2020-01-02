@@ -11,7 +11,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='Paramiko SSH & SCP Tutorial',
-    version='0.0.1',
+    version='1.0.0',
     description='SSH & SCP in Python with Paramiko.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -25,7 +25,8 @@ setup(
     keywords='Paramiko SCP SSH Remote Automation',
     packages=find_packages(),
     install_requires=['Paramiko',
-                      'SCP'],
+                      'SCP',
+                      'Loguru'],
     extras_require={
         'dev': ['check-manifest'],
         'test': ['coverage'],
@@ -33,7 +34,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'install=wsgi:__main__',
+            'run=wsgi:__main__',
         ],
     },
     project_urls={

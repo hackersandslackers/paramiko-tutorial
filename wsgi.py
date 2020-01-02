@@ -1,6 +1,5 @@
 """Entry point."""
-from application import upload
-from config import Config
+from paramiko_tutorial import main
 
 if __name__ == '__main__':
-    upload(Config)
+    main()
