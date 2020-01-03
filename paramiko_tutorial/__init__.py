@@ -24,5 +24,7 @@ def upload_files_to_remote(remote):
 
 def execute_command_on_remote(remote):
     """Execute UNIX command on the remote host."""
-    remote.execute_cmd('cd /var/www/ghost ls')
-
+    remote.execute_commands(['cd /var/www/ && ls',
+                             'tail /var/log/nginx/access.log',
+                             'ps aux | grep node',
+                             'cd /uploads/ && ls'])

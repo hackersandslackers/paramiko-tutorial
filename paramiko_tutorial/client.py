@@ -8,7 +8,7 @@ from scp import SCPClient, SCPException
 
 
 logger.add(sys.stderr,
-           format="{time} {level} {message}",
+           format="{time} {message}",
            filter="client",
            level="INFO")
 logger.add('logs/log_{time:YYYY-MM-DD}.log',
@@ -66,10 +66,11 @@ class RemoteClient:
             return self.client
 
     def bulk_upload(self, files):
+        """Upload multiple files to a remote directory."""
         if self.client is None:
             self.client = self.__connect()
         uploads = [self.__upload_single_file(file) for file in files]
-        logger.info(f'Uploaded {len(uploads)} files to {self.remote_path} on {self.host}')
+        logger.info(f'Finished uploading {len(uploads)} files to {self.remote_path} on {self.host}')
 
     def __upload_single_file(self, file):
         """Upload a single file to a remote directory."""
@@ -81,17 +82,20 @@ class RemoteClient:
             logger.error(error)
             raise error
         finally:
-            return file
+            logger.info(f'Uploaded {file} to {self.remote_path}')
 
-    def execute_cmd(self, cmd):
-        """Execute a single unix command."""
+    def execute_commands(self, commands):
+        """Execute multiple commands in succession."""
         if self.client is None:
             self.client = self.__connect()
-        stdin, stdout, stderr = self.client.exec_command(cmd)
-        response = stdout.readlines()
-        logger.info(f'INPUT: {cmd} | OUTPUT: {response}')
-        return response
+        for cmd in commands:
+            stdin, stdout, stderr = self.client.exec_command(cmd)
+            stdout.channel.recv_exit_status()
+            response = stdout.readlines()
+            for line in response:
+                logger.info(f'INPUT: {cmd} | OUTPUT: {line}')
 
     def disconnect(self):
         """Close ssh connection."""
         self.client.close()
+        self.scp.close()
