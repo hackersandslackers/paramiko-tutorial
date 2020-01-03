@@ -8,7 +8,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/hackersandslackers/paramiko-tutorial.svg?style=flat-square8&colorA=4c566a&logo=GitHub&colorB=ebcb8b)](https://github.com/hackersandslackers/paramiko-tutorial/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/hackersandslackers/paramiko-tutorial.svg?style=flat-square&colorA=4c566a&logo=GitHub&colorB=ebcb8b)](https://github.com/hackersandslackers/paramiko-tutorial/network)
 
-![Paramiko Tutorial](https://res-3.cloudinary.com/hackers/image/upload/q_auto:best/v1/2019/12/paramiko.jpg)
+![Paramiko Tutorial](https://res.cloudinary.com/hackers/image/upload/v1578037969/2020/01/paramiko-2.jpg)
 
 Source code for the accompanying tutorial found here: https://hackersandslackers.com/ssh-scp-in-python-with-paramiko/
 
