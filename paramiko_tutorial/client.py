@@ -29,6 +29,8 @@ class RemoteClient:
         self.scp = None
         self.__upload_ssh_key()
 
+    # Fetch and transfer SSH Keys.
+    # ------------------------------------------------------
     def __get_ssh_key(self):
         """Fetch locally stored SSH key."""
         try:
@@ -46,6 +48,8 @@ class RemoteClient:
         except FileNotFoundError as error:
             logger.error(error)
 
+    # Open and close remote SSH and SCP connections.
+    # ------------------------------------------------------
     def __connect(self):
         """Open connection to remote host."""
         try:
@@ -65,6 +69,13 @@ class RemoteClient:
         finally:
             return self.client
 
+    def disconnect(self):
+        """Close ssh connection."""
+        self.client.close()
+        self.scp.close()
+
+    # Upload or download files from host.
+    # ------------------------------------------------------
     def bulk_upload(self, files):
         """Upload multiple files to a remote directory."""
         if self.client is None:
@@ -84,6 +95,14 @@ class RemoteClient:
         finally:
             logger.info(f'Uploaded {file} to {self.remote_path}')
 
+    def download_file(self, file):
+        """Download file from remote host."""
+        if self.conn is None:
+            self.conn = self.connect()
+        self.scp.get(file)
+
+    # Execute commands on your remote host.
+    # ------------------------------------------------------
     def execute_commands(self, commands):
         """Execute multiple commands in succession."""
         if self.client is None:
@@ -94,8 +113,3 @@ class RemoteClient:
             response = stdout.readlines()
             for line in response:
                 logger.info(f'INPUT: {cmd} | OUTPUT: {line}')
-
-    def disconnect(self):
-        """Close ssh connection."""
-        self.client.close()
-        self.scp.close()
