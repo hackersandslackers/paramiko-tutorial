@@ -7,8 +7,14 @@ from paramiko.auth_handler import AuthenticationException, SSHException
 from scp import SCPClient, SCPException
 
 
-logger.add(sys.stderr, format="{time} {level} {message}", filter="client", level="INFO")
-logger.add('logs/log_{time:YYYY-MM-DD}.log', format="{time} {level} {message}", filter="client", level="ERROR")
+logger.add(sys.stderr,
+           format="{time} {level} {message}",
+           filter="client",
+           level="INFO")
+logger.add('logs/log_{time:YYYY-MM-DD}.log',
+           format="{time} {level} {message}",
+           filter="client",
+           level="ERROR")
 
 
 class RemoteClient:
@@ -19,8 +25,7 @@ class RemoteClient:
         self.user = user
         self.ssh_key_filepath = ssh_key_filepath
         self.remote_path = remote_path
-        self.client = SSHClient()
-        self.conn = None
+        self.client = None
         self.scp = None
         self.__upload_ssh_key()
 
@@ -44,6 +49,7 @@ class RemoteClient:
     def __connect(self):
         """Open connection to remote host."""
         try:
+            self.client = SSHClient()
             self.client.load_system_host_keys()
             self.client.set_missing_host_key_policy(AutoAddPolicy())
             self.client.connect(self.host,
@@ -51,7 +57,7 @@ class RemoteClient:
                                 key_filename=self.ssh_key_filepath,
                                 look_for_keys=True,
                                 timeout=5000)
-            self.scp = SCPClient(self.conn.get_transport())
+            self.scp = SCPClient(self.client.get_transport())
         except AuthenticationException as error:
             logger.info('Authentication failed: did you remember to create an SSH key?')
             logger.error(error)
@@ -60,8 +66,8 @@ class RemoteClient:
             return self.client
 
     def bulk_upload(self, files):
-        if self.conn is None:
-            self.conn = self.__connect()
+        if self.client is None:
+            self.client = self.__connect()
         uploads = [self.__upload_single_file(file) for file in files]
         logger.info(f'Uploaded {len(uploads)} files to {self.remote_path} on {self.host}')
 
@@ -79,9 +85,9 @@ class RemoteClient:
 
     def execute_cmd(self, cmd):
         """Execute a single unix command."""
-        if self.conn is None:
-            self.conn = self.__connect()
-        stdin, stdout, stderr = self.conn.exec_command(cmd)
+        if self.client is None:
+            self.client = self.__connect()
+        stdin, stdout, stderr = self.client.exec_command(cmd)
         response = stdout.readlines()
         logger.info(f'INPUT: {cmd} | OUTPUT: {response}')
         return response
@@ -89,5 +95,3 @@ class RemoteClient:
     def disconnect(self):
         """Close ssh connection."""
         self.client.close()
-        self.scp.close()
-        self.conn = None
