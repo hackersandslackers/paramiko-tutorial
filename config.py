@@ -1,4 +1,4 @@
-"""Configuration module."""
+"""Remote host configuration."""
 from os import environ
 
 host = environ.get('REMOTE_HOST')

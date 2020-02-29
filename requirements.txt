@@ -7,7 +7,6 @@ loguru==0.4.0
 more-itertools==8.0.2
 packaging==19.2
 paramiko==2.7.1
-Paramiko-SSH-SCP-Tutorial==0.0.1
 pluggy==0.13.1
 py==1.8.1
 pycparser==2.19

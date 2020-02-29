@@ -1,4 +1,4 @@
-"""Remote host object to handle connections and actions."""
+"""Client to handle connections and actions executed against a remote host."""
 import sys
 from loguru import logger
 from os import system
@@ -27,12 +27,13 @@ class RemoteClient:
         self.remote_path = remote_path
         self.client = None
         self.scp = None
+        self.conn = None
         self.__upload_ssh_key()
 
-    # Fetch and transfer SSH Keys.
-    # ------------------------------------------------------
     def __get_ssh_key(self):
-        """Fetch locally stored SSH key."""
+        """
+        Fetch locally stored SSH key.
+        """
         try:
             self.ssh_key = RSAKey.from_private_key_file(self.ssh_key_filepath)
             logger.info(f'Found SSH key at self {self.ssh_key_filepath}')
@@ -48,10 +49,10 @@ class RemoteClient:
         except FileNotFoundError as error:
             logger.error(error)
 
-    # Open and close remote SSH and SCP connections.
-    # ------------------------------------------------------
     def __connect(self):
-        """Open connection to remote host."""
+        """
+        Open connection to remote host.
+        """
         try:
             self.client = SSHClient()
             self.client.load_system_host_keys()
@@ -70,14 +71,18 @@ class RemoteClient:
             return self.client
 
     def disconnect(self):
-        """Close ssh connection."""
+        """
+        Close ssh connection.
+        """
         self.client.close()
         self.scp.close()
 
-    # Upload or download files from host.
-    # ------------------------------------------------------
     def bulk_upload(self, files):
-        """Upload multiple files to a remote directory."""
+        """
+        Upload multiple files to a remote directory.
+
+        :param files: List of strings representing file paths to local files.
+        """
         if self.client is None:
             self.client = self.__connect()
         uploads = [self.__upload_single_file(file) for file in files]
@@ -101,10 +106,12 @@ class RemoteClient:
             self.conn = self.connect()
         self.scp.get(file)
 
-    # Execute commands on your remote host.
-    # ------------------------------------------------------
     def execute_commands(self, commands):
-        """Execute multiple commands in succession."""
+        """
+        Execute multiple commands in succession.
+
+        :param commands: List of unix commands as strings.
+        """
         if self.client is None:
             self.client = self.__connect()
         for cmd in commands:
