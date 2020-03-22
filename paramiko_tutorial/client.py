@@ -103,7 +103,7 @@ class RemoteClient:
     def download_file(self, file):
         """Download file from remote host."""
         if self.conn is None:
-            self.conn = self.connect()
+            self.conn = self.__connect()
         self.scp.get(file)
 
     def execute_commands(self, commands):
