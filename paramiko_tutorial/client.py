@@ -28,9 +28,9 @@ class RemoteClient:
         self.client = None
         self.scp = None
         self.conn = None
-        self.__upload_ssh_key()
+        self._upload_ssh_key()
 
-    def __get_ssh_key(self):
+    def _get_ssh_key(self):
         """
         Fetch locally stored SSH key.
         """
@@ -41,7 +41,7 @@ class RemoteClient:
             logger.error(error)
         return self.ssh_key
 
-    def __upload_ssh_key(self):
+    def _upload_ssh_key(self):
         try:
             system(f'ssh-copy-id -i {self.ssh_key_filepath} {self.user}@{self.host}>/dev/null 2>&1')
             system(f'ssh-copy-id -i {self.ssh_key_filepath}.pub {self.user}@{self.host}>/dev/null 2>&1')
@@ -49,26 +49,26 @@ class RemoteClient:
         except FileNotFoundError as error:
             logger.error(error)
 
-    def __connect(self):
+    def _connect(self):
         """
         Open connection to remote host.
         """
-        try:
-            self.client = SSHClient()
-            self.client.load_system_host_keys()
-            self.client.set_missing_host_key_policy(AutoAddPolicy())
-            self.client.connect(self.host,
-                                username=self.user,
-                                key_filename=self.ssh_key_filepath,
-                                look_for_keys=True,
-                                timeout=5000)
-            self.scp = SCPClient(self.client.get_transport())
-        except AuthenticationException as error:
-            logger.info('Authentication failed: did you remember to create an SSH key?')
-            logger.error(error)
-            raise error
-        finally:
-            return self.client
+        if self.conn is None:
+            try:
+                self.client = SSHClient()
+                self.client.load_system_host_keys()
+                self.client.set_missing_host_key_policy(AutoAddPolicy())
+                self.client.connect(self.host,
+                                    username=self.user,
+                                    key_filename=self.ssh_key_filepath,
+                                    look_for_keys=True,
+                                    timeout=5000)
+                self.scp = SCPClient(self.client.get_transport())
+            except AuthenticationException as error:
+                logger.info('Authentication failed: did you remember to create an SSH key?')
+                logger.error(error)
+                raise error
+        return self.client
 
     def disconnect(self):
         """
@@ -83,12 +83,11 @@ class RemoteClient:
 
         :param files: List of strings representing file paths to local files.
         """
-        if self.client is None:
-            self.client = self.__connect()
-        uploads = [self.__upload_single_file(file) for file in files]
+        self.conn = self._connect()
+        uploads = [self._upload_single_file(file) for file in files]
         logger.info(f'Finished uploading {len(uploads)} files to {self.remote_path} on {self.host}')
 
-    def __upload_single_file(self, file):
+    def _upload_single_file(self, file):
         """Upload a single file to a remote directory."""
         try:
             self.scp.put(file,
@@ -102,8 +101,7 @@ class RemoteClient:
 
     def download_file(self, file):
         """Download file from remote host."""
-        if self.conn is None:
-            self.conn = self.connect()
+        self.conn = self._connect()
         self.scp.get(file)
 
     def execute_commands(self, commands):
@@ -112,8 +110,7 @@ class RemoteClient:
 
         :param commands: List of unix commands as strings.
         """
-        if self.client is None:
-            self.client = self.__connect()
+        self.conn = self._connect()
         for cmd in commands:
             stdin, stdout, stderr = self.client.exec_command(cmd)
             stdout.channel.recv_exit_status()
