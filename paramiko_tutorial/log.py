@@ -24,3 +24,6 @@ def create_logger():
 		       + "<light-white>{message}</light-white>"
 	)
 	return custom_logger
+
+
+logger = create_logger()

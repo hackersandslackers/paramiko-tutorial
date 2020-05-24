@@ -3,9 +3,7 @@ from os import system
 from paramiko import SSHClient, AutoAddPolicy, RSAKey
 from paramiko.auth_handler import AuthenticationException, SSHException
 from scp import SCPClient, SCPException
-from .log import create_logger
-
-logger = create_logger()
+from .log import logger
 
 
 class RemoteClient:
@@ -23,9 +21,7 @@ class RemoteClient:
 
     @logger.catch
     def _get_ssh_key(self):
-        """
-        Fetch locally stored SSH key.
-        """
+        """ Fetch locally stored SSH key."""
         try:
             self.ssh_key = RSAKey.from_private_key_file(self.ssh_key_filepath)
             logger.info(f'Found SSH key at self {self.ssh_key_filepath}')
@@ -44,19 +40,19 @@ class RemoteClient:
 
     @logger.catch
     def _connect(self):
-        """
-        Open connection to remote host.
-        """
+        """Open connection to remote host. """
         if self.conn is None:
             try:
                 self.client = SSHClient()
                 self.client.load_system_host_keys()
                 self.client.set_missing_host_key_policy(AutoAddPolicy())
-                self.client.connect(self.host,
-                                    username=self.user,
-                                    key_filename=self.ssh_key_filepath,
-                                    look_for_keys=True,
-                                    timeout=5000)
+                self.client.connect(
+                    self.host,
+                    username=self.user,
+                    key_filename=self.ssh_key_filepath,
+                    look_for_keys=True,
+                    timeout=5000
+                )
                 self.scp = SCPClient(self.client.get_transport())
             except AuthenticationException as error:
                 logger.error(f'Authentication failed: did you remember to create an SSH key? {error}')
@@ -64,9 +60,7 @@ class RemoteClient:
         return self.client
 
     def disconnect(self):
-        """
-        Close ssh connection.
-        """
+        """Close ssh connection."""
         if self.client:
             self.client.close()
         if self.scp:
@@ -77,7 +71,8 @@ class RemoteClient:
         """
         Upload multiple files to a remote directory.
 
-        :param files: List of strings representing file paths to local files.
+        :param files: List of paths to local files.
+        :type files: List[str]
         """
         self.conn = self._connect()
         uploads = [self._upload_single_file(file) for file in files]
@@ -111,6 +106,7 @@ class RemoteClient:
         Execute multiple commands in succession.
 
         :param commands: List of unix commands as strings.
+        :type commands: List[str]
         """
         self.conn = self._connect()
         for cmd in commands:
