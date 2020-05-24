@@ -1,20 +1,11 @@
 """Client to handle connections and actions executed against a remote host."""
-import sys
-from loguru import logger
 from os import system
 from paramiko import SSHClient, AutoAddPolicy, RSAKey
 from paramiko.auth_handler import AuthenticationException, SSHException
 from scp import SCPClient, SCPException
+from .log import create_logger
 
-
-logger.add(sys.stderr,
-           format="{time} {message}",
-           filter="client",
-           level="INFO")
-logger.add('logs/log_{time:YYYY-MM-DD}.log',
-           format="{time} {level} {message}",
-           filter="client",
-           level="ERROR")
+logger = create_logger()
 
 
 class RemoteClient:
@@ -30,6 +21,7 @@ class RemoteClient:
         self.conn = None
         self._upload_ssh_key()
 
+    @logger.catch
     def _get_ssh_key(self):
         """
         Fetch locally stored SSH key.
@@ -41,6 +33,7 @@ class RemoteClient:
             logger.error(error)
         return self.ssh_key
 
+    @logger.catch
     def _upload_ssh_key(self):
         try:
             system(f'ssh-copy-id -i {self.ssh_key_filepath} {self.user}@{self.host}>/dev/null 2>&1')
@@ -49,6 +42,7 @@ class RemoteClient:
         except FileNotFoundError as error:
             logger.error(error)
 
+    @logger.catch
     def _connect(self):
         """
         Open connection to remote host.
@@ -65,8 +59,7 @@ class RemoteClient:
                                     timeout=5000)
                 self.scp = SCPClient(self.client.get_transport())
             except AuthenticationException as error:
-                logger.info('Authentication failed: did you remember to create an SSH key?')
-                logger.error(error)
+                logger.error(f'Authentication failed: did you remember to create an SSH key? {error}')
                 raise error
         return self.client
 
@@ -74,9 +67,12 @@ class RemoteClient:
         """
         Close ssh connection.
         """
-        self.client.close()
-        self.scp.close()
+        if self.client:
+            self.client.close()
+        if self.scp:
+            self.scp.close()
 
+    @logger.catch
     def bulk_upload(self, files):
         """
         Upload multiple files to a remote directory.
@@ -104,6 +100,7 @@ class RemoteClient:
         self.conn = self._connect()
         self.scp.get(file)
 
+    @logger.catch
     def execute_commands(self, commands):
         """
         Execute multiple commands in succession.

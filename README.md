@@ -12,24 +12,27 @@
 
 Source code for the accompanying tutorial found here: https://hackersandslackers.com/ssh-scp-in-python-with-paramiko/
 
-## Getting Started
+## Installation
 
-Installation is recommended with Pipenv:
+**Installation via `requirements.txt`**:
 
 ```shell
-$ git clone https://github.com/hackersandslackers/paramiko-tutoral.git
+$ git clone https://github.com/hackersandslackers/paramiko-tutorial.git
+$ cd paramiko-tutorial
+$ python3 -m venv myenv
+$ source myenv/bin/activate
+$ pip3 install -r requirements.txt
+$ python3 main.py
+```
+
+**Installation via [Pipenv](https://pipenv-fork.readthedocs.io/en/latest/)**:
+
+```shell
+$ git clone https://github.com/hackersandslackers/paramiko-tutorial.git
 $ cd paramiko-tutorial
 $ pipenv shell
 $ pipenv update
 $ python3 main.py
-```
-
-Alternatively, try installing via `setup.py`:
-
-```shell
-$ git clone https://github.com/hackersandslackers/paramiko-tutoral.git
-$ cd paramiko-tutorial
-$ python3 setup.py run
 ```
 
 The following environment variables are required to run this script:

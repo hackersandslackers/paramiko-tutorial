@@ -1,9 +1,11 @@
 """Perform tasks against a remote host."""
-from config import (host,
-                    user,
-                    ssh_key_filepath,
-                    local_file_directory,
-                    remote_path)
+from config import (
+    host,
+    user,
+    ssh_key_filepath,
+    local_file_directory,
+    remote_path
+)
 from .files import fetch_local_files
 from .client import RemoteClient
 
