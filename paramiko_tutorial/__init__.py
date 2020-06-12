@@ -20,8 +20,8 @@ def main():
 
 def upload_files_to_remote(remote):
     """Upload files to remote via SCP."""
-    files = fetch_local_files(local_file_directory)
-    remote.bulk_upload(files)
+    local_files = fetch_local_files(local_file_directory)
+    remote.bulk_upload(local_files)
 
 
 def execute_command_on_remote(remote):

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "Paramiko SSH & SCP Tutorial"
 version = "0.1.0"
-description = "Automate remote server tasks by using the Paramiko & SCP Python libraries. Use Python to SSH into hosts, execute tasks, transfer files, etc."
+description = "Automate tasks on a remote host with Python libraries Paramiko & SCP. Write scripts to SSH into hosts, execute tasks, transfer files, etc."
 authors = ["Todd Birchard <toddbirchard@gmail.com>"]
 maintainers = ["Todd Birchard <toddbirchard@gmail.com>"]
 license = "MIT"
