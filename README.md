@@ -35,6 +35,16 @@ $ pipenv update
 $ python3 main.py
 ```
 
+**Installation via [Poetry](https://python-poetry.org/)**:
+
+```shell
+$ git clone https://github.com/hackersandslackers/paramiko-tutorial.git
+$ cd paramiko-tutorial
+$ poetry shell
+$ poetry update
+$ poetry run
+```
+
 ## Usage
 
 Replace the values in **.env.example** with your values and rename this file to **.env**:
