@@ -2,7 +2,7 @@
 bcrypt==3.2.0
 cffi==1.14.2
 cryptography==3.1
-loguru==0.5.1
+loguru==0.5.3
 paramiko==2.7.2
 pycparser==2.20
 pynacl==1.4.0
