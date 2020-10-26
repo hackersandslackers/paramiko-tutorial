@@ -7,5 +7,5 @@ paramiko==2.7.2
 pycparser==2.20
 pynacl==1.4.0
 python-dotenv==0.14.0
-scp==0.13.2
+scp==0.13.3
 six==1.15.0
