@@ -1,9 +1,9 @@
 -i https://pypi.org/simple/
 bcrypt==3.2.0
-cffi==1.14.2
-cryptography==3.1
-loguru==0.5.1
-paramiko==2.7.2
+cffi==1.14.3
+cryptography==3.2.1
+loguru==0.5.0
+paramiko==2.7.1
 pycparser==2.20
 pynacl==1.4.0
 python-dotenv==0.14.0
