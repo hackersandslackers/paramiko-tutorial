@@ -90,7 +90,7 @@ class RemoteClient:
         except SCPException as error:
             logger.error(error)
             raise error
-        finally:
+        else:
             logger.info(f'Uploaded {file} to {self.remote_path}')
             return upload
 
