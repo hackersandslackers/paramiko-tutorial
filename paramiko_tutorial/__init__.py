@@ -1,13 +1,8 @@
 """Perform tasks against a remote host."""
-from config import (
-    host,
-    user,
-    ssh_key_filepath,
-    local_file_directory,
-    remote_path
-)
-from .files import fetch_local_files
+from config import host, local_file_directory, remote_path, ssh_key_filepath, user
+
 from .client import RemoteClient
+from .files import fetch_local_files
 
 
 def main():
@@ -26,7 +21,11 @@ def upload_files_to_remote(remote):
 
 def execute_command_on_remote(remote):
     """Execute UNIX command on the remote host."""
-    remote.execute_commands(['cd /var/www/ && ls',
-                             'tail /var/log/nginx/access.log',
-                             'ps aux | grep node',
-                             'cd /uploads/ && ls'])
+    remote.execute_commands(
+        [
+            "cd /var/www/ && ls",
+            "tail /var/log/nginx/access.log",
+            "ps aux | grep node",
+            "cd /uploads/ && ls",
+        ]
+    )

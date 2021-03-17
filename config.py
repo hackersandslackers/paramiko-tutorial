@@ -1,15 +1,30 @@
 """Remote host configuration."""
-from os import environ, path
+from os import getenv, path
+
 from dotenv import load_dotenv
+from log import LOGGER
 
 # Load environment variables from .env
 basedir = path.abspath(path.dirname(__file__))
-load_dotenv(path.join(basedir, '.env'))
+load_dotenv(path.join(basedir, ".env"))
 
 # Read environment variables
-host = environ.get('REMOTE_HOST')
-user = environ.get('REMOTE_USERNAME')
-ssh_key_filepath = environ.get('SSH_KEY')
-remote_path = environ.get('REMOTE_PATH')
+host = getenv("REMOTE_HOST")
+user = getenv("REMOTE_USERNAME")
+ssh_key_filepath = getenv("SSH_KEY")
+remote_path = getenv("REMOTE_PATH")
+config_values = [
+    {"host": host},
+    {"user": user},
+    {"ssh": ssh_key_filepath},
+    {"path": remote_path},
+]
 
-local_file_directory = 'transfer'
+
+for config in config_values:
+    if None in config.values():
+        LOGGER.warning(f"Config value not set: {config.popitem()}")
+        raise Exception("Set your environment variables via a .env file.")
+
+
+local_file_directory = "files"
