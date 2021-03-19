@@ -1,5 +1,12 @@
 """Perform tasks against a remote host."""
-from config import host, local_file_directory, remote_path, ssh_key_filepath, user
+from config import (
+    host,
+    local_file_directory,
+    password,
+    remote_path,
+    ssh_key_filepath,
+    username,
+)
 
 from .client import RemoteClient
 from .files import fetch_local_files
@@ -7,10 +14,9 @@ from .files import fetch_local_files
 
 def main():
     """Initialize remote host client and execute actions."""
-    remote = RemoteClient(host, user, ssh_key_filepath, remote_path)
+    remote = RemoteClient(host, username, password, ssh_key_filepath, remote_path)
     upload_files_to_remote(remote)
     execute_command_on_remote(remote)
-    remote.disconnect()
 
 
 def upload_files_to_remote(remote):

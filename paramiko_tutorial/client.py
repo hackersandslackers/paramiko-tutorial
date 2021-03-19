@@ -1,24 +1,58 @@
 """Client to handle connections and actions executed against a remote host."""
 from os import system
+from typing import List
 
-from log import LOGGER
 from paramiko import AutoAddPolicy, RSAKey, SSHClient
 from paramiko.auth_handler import AuthenticationException, SSHException
 from scp import SCPClient, SCPException
+
+from log import LOGGER
 
 
 class RemoteClient:
     """Client to interact with a remote host via SSH & SCP."""
 
-    def __init__(self, host, user, ssh_key_filepath, remote_path):
+    def __init__(
+        self,
+        host: str,
+        user: str,
+        password: str,
+        ssh_key_filepath: str,
+        remote_path: str,
+    ):
         self.host = host
         self.user = user
+        self.password = password
         self.ssh_key_filepath = ssh_key_filepath
         self.remote_path = remote_path
         self.client = None
-        self.scp = None
-        self.conn = None
         self._upload_ssh_key()
+
+    @property
+    def connect(self):
+        """Open connection to remote host. """
+        try:
+            client = SSHClient()
+            client.load_system_host_keys()
+            client.set_missing_host_key_policy(AutoAddPolicy())
+            client.connect(
+                self.host,
+                username=self.user,
+                password=self.password,
+                key_filename=self.ssh_key_filepath,
+                timeout=5000,
+            )
+            return client
+        except AuthenticationException as error:
+            LOGGER.error(
+                f"Authentication failed: did you remember to create an SSH key? {error}"
+            )
+            raise error
+
+    @property
+    def scp(self) -> SCPClient:
+        conn = self.connect
+        return SCPClient(conn.get_transport())
 
     @LOGGER.catch
     def _get_ssh_key(self):
@@ -40,63 +74,30 @@ class RemoteClient:
         except FileNotFoundError as error:
             LOGGER.error(error)
 
-    @LOGGER.catch
-    def _connect(self):
-        """Open connection to remote host. """
-        if self.conn is None:
-            try:
-                self.client = SSHClient()
-                self.client.load_system_host_keys()
-                self.client.set_missing_host_key_policy(AutoAddPolicy())
-                self.client.connect(
-                    self.host,
-                    username=self.user,
-                    key_filename=self.ssh_key_filepath,
-                    look_for_keys=True,
-                    timeout=5000,
-                )
-                self.scp = SCPClient(self.client.get_transport())
-            except AuthenticationException as error:
-                LOGGER.error(
-                    f"Authentication failed: did you remember to create an SSH key? {error}"
-                )
-                raise error
-        return self.client
-
     def disconnect(self):
         """Close SSH & SCP connection."""
-        if self.client:
+        if self.connect:
             self.client.close()
         if self.scp:
             self.scp.close()
 
-    @LOGGER.catch
-    def bulk_upload(self, files):
+    def bulk_upload(self, files: List[str]):
         """
         Upload multiple files to a remote directory.
 
         :param files: List of local files to be uploaded.
         :type files: List[str]
         """
-        self.conn = self._connect()
-        uploads = [self._upload_single_file(file) for file in files]
-        LOGGER.info(
-            f"Finished uploading {len(uploads)} files to {self.remote_path} on {self.host}"
-        )
-
-    def _upload_single_file(self, file):
-        """Upload a single file to a remote directory."""
         try:
-            self.scp.put(file, recursive=True, remote_path=self.remote_path)
-            LOGGER.info(f"Uploaded {file} to {self.remote_path}")
-            return file
-        except SCPException as error:
-            LOGGER.error(error)
-            raise error
+            self.scp.put(files, remote_path=self.remote_path)
+            LOGGER.info(
+                f"Finished uploading {len(files)} files to {self.remote_path} on {self.host}"
+            )
+        except SCPException as e:
+            raise e
 
     def download_file(self, file):
         """Download file from remote host."""
-        self.conn = self._connect()
         self.scp.get(file)
 
     @LOGGER.catch
@@ -107,7 +108,6 @@ class RemoteClient:
         :param commands: List of unix commands as strings.
         :type commands: List[str]
         """
-        self.conn = self._connect()
         for cmd in commands:
             stdin, stdout, stderr = self.client.exec_command(cmd)
             stdout.channel.recv_exit_status()

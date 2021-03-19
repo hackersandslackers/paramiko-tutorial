@@ -2,6 +2,7 @@
 from os import getenv, path
 
 from dotenv import load_dotenv
+
 from log import LOGGER
 
 # Load environment variables from .env
@@ -10,12 +11,14 @@ load_dotenv(path.join(basedir, ".env"))
 
 # Read environment variables
 host = getenv("REMOTE_HOST")
-user = getenv("REMOTE_USERNAME")
-ssh_key_filepath = getenv("SSH_KEY")
+username = getenv("REMOTE_USERNAME")
+password = getenv("REMOTE_PASSWORD")
+ssh_key_filepath = getenv("SSH_KEY_FILEPATH")
 remote_path = getenv("REMOTE_PATH")
 config_values = [
     {"host": host},
-    {"user": user},
+    {"user": username},
+    {"password": password},
     {"ssh": ssh_key_filepath},
     {"path": remote_path},
 ]
