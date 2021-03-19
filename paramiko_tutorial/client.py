@@ -29,7 +29,7 @@ class RemoteClient:
         self._upload_ssh_key()
 
     @property
-    def connect(self):
+    def connection(self):
         """Open connection to remote host. """
         try:
             client = SSHClient()
@@ -43,28 +43,26 @@ class RemoteClient:
                 timeout=5000,
             )
             return client
-        except AuthenticationException as error:
+        except AuthenticationException as e:
             LOGGER.error(
-                f"Authentication failed: did you remember to create an SSH key? {error}"
+                f"Authentication failed: did you remember to create an SSH key? {e}"
             )
-            raise error
+            raise e
 
     @property
     def scp(self) -> SCPClient:
-        conn = self.connect
+        conn = self.connection
         return SCPClient(conn.get_transport())
 
-    @LOGGER.catch
     def _get_ssh_key(self):
         """ Fetch locally stored SSH key."""
         try:
             self.ssh_key = RSAKey.from_private_key_file(self.ssh_key_filepath)
             LOGGER.info(f"Found SSH key at self {self.ssh_key_filepath}")
-        except SSHException as error:
-            LOGGER.error(error)
-        return self.ssh_key
+            return self.ssh_key
+        except SSHException as e:
+            LOGGER.error(e)
 
-    @LOGGER.catch
     def _upload_ssh_key(self):
         try:
             system(
@@ -76,7 +74,7 @@ class RemoteClient:
 
     def disconnect(self):
         """Close SSH & SCP connection."""
-        if self.connect:
+        if self.connection:
             self.client.close()
         if self.scp:
             self.scp.close()
@@ -96,12 +94,11 @@ class RemoteClient:
         except SCPException as e:
             raise e
 
-    def download_file(self, file):
+    def download_file(self, file: str):
         """Download file from remote host."""
         self.scp.get(file)
 
-    @LOGGER.catch
-    def execute_commands(self, commands):
+    def execute_commands(self, commands: List[str]):
         """
         Execute multiple commands in succession.
 
