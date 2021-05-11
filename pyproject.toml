@@ -28,7 +28,7 @@ python-dotenv = "*"
 pytest = "*"
 isort = "^5.8.0"
 black = "^21.5b1"
-flake8 = "^3.9.0"
+flake8 = "^3.9.2"
 
 [build-system]
 requires = ["poetry>=0.12"]
