@@ -45,8 +45,11 @@ class RemoteClient:
             return client
         except AuthenticationException as e:
             LOGGER.error(
-                f"Authentication failed: did you remember to create an SSH key? {e}"
+                f"AuthenticationException occurred; did you remember to generate an SSH key? {e}"
             )
+            raise e
+        except Exception as e:
+            LOGGER.error(f"Unexpected error occurred: {e}")
             raise e
 
     @property
@@ -55,7 +58,7 @@ class RemoteClient:
         return SCPClient(conn.get_transport())
 
     def _get_ssh_key(self):
-        """ Fetch locally stored SSH key."""
+        """Fetch locally stored SSH key."""
         try:
             self.ssh_key = RSAKey.from_private_key_file(self.ssh_key_filepath)
             LOGGER.info(f"Found SSH key at self {self.ssh_key_filepath}")

@@ -1,11 +1,14 @@
 SRCPATH := $(shell pwd)
 PROJECTNAME := $(shell basename $CURDIR)
+ENTRYPOINT := $(PROJECTNAME).ini
+VIRTUAL_ENVIRONMENT := $(CURDIR)/.venv
+LOCAL_PYTHON := $(VIRTUAL_ENVIRONMENT)/bin/python3
 
 define HELP
-Manage $(PROJECTNAME). Usage:
+Manage $(PROJECT_NAME). Usage:
 
-make run        - Run $(PROJECTNAME).
-make deploy     - Pull latest build and deploy to production.
+make run        - Run $(PROJECT_NAME).
+make install    - Pull latest build and deploy to production.
 make update     - Update pip dependencies via Python Poetry.
 make format     - Format code with Python's `Black` library.
 make lint       - Check code formatting with flake8
@@ -16,12 +19,8 @@ export HELP
 
 .PHONY: run restart deploy update format lint clean help
 
-requirements: .requirements.txt
-env: ./.venv/bin/activate
-
-
-.requirements.txt: requirements.txt
-	$(shell . .venv/bin/activate && pip install -r requirements.txt)
+venv: requirements.txt
+	. .venv/bin/activate && pip install -r requirements.txt
 
 
 all help:
@@ -29,24 +28,28 @@ all help:
 
 
 .PHONY: run
-run: env
-	python main.py
+run:
+	$(VIRTUAL_ENVIRONMENT)/bin/python3 -m main.py
 
 
-.PHONY: deploy
-deploy:
-	$(shell . ./deploy.sh)
+.PHONY: install
+install:
+	make clean
+	python3 -m venv $(VIRTUAL_ENVIRONMENT)
+	. $(VIRTUAL_ENVIRONMENT)/bin/activate
+	$(LOCAL_PYTHON) -m pip install --upgrade pip setuptools wheel
+	make requirements
 
 
 .PHONY: update
-update: env
+update:
 	.venv/bin/python3 -m pip install --upgrade pip setuptools wheel
 	poetry update
 	poetry export -f requirements.txt --output requirements.txt --without-hashes
 
 
 .PHONY: format
-format: env
+format: venv
 	isort -rc --multi-line=3 .
 	black .
 
