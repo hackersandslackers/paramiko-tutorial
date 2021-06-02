@@ -1,7 +1,7 @@
 SRCPATH := $(shell pwd)
 PROJECTNAME := $(shell basename $CURDIR)
 ENTRYPOINT := $(PROJECTNAME).ini
-VIRTUAL_ENVIRONMENT := $(CURDIR)/.venv
+VIRTUAL_ENVIRONMENT := .venv
 LOCAL_PYTHON := $(VIRTUAL_ENVIRONMENT)/bin/python3
 
 define HELP
@@ -19,7 +19,7 @@ export HELP
 
 .PHONY: run restart deploy update format lint clean help
 
-venv: requirements.txt
+venv:
 	. .venv/bin/activate && pip install -r requirements.txt
 
 
@@ -38,7 +38,7 @@ install:
 	python3 -m venv $(VIRTUAL_ENVIRONMENT)
 	. $(VIRTUAL_ENVIRONMENT)/bin/activate
 	$(LOCAL_PYTHON) -m pip install --upgrade pip setuptools wheel
-	make requirements
+	$(LOCAL_PYTHON) -m pip install -r requirements.
 
 
 .PHONY: update
