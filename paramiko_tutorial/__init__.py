@@ -1,33 +1,40 @@
 """Perform tasks against a remote host."""
-from config import (
-    host,
-    local_file_directory,
-    password,
-    remote_path,
-    ssh_key_filepath,
-    username,
-)
+from config import local_file_directory
 
 from .client import RemoteClient
 from .files import fetch_local_files
 
 
-def main():
-    """Initialize remote host client and execute actions."""
-    remote = RemoteClient(host, username, password, ssh_key_filepath, remote_path)
-    upload_files_to_remote(remote)
-    execute_command_on_remote(remote)
+def main(ssh_remote_client: RemoteClient):
+    """
+    Initialize remote host client and execute actions.
+
+    :param ssh_remote_client: Remote server.
+    :type ssh_remote_client: RemoteClient
+    """
+    upload_files_to_remote(ssh_remote_client)
+    execute_command_on_remote(ssh_remote_client)
 
 
-def upload_files_to_remote(remote):
-    """Upload files to remote via SCP."""
+def upload_files_to_remote(ssh_remote_client: RemoteClient):
+    """
+    Upload files to remote via SCP.
+
+    :param ssh_remote_client: Remote server.
+    :type ssh_remote_client: RemoteClient
+    """
     local_files = fetch_local_files(local_file_directory)
-    remote.bulk_upload(local_files)
+    ssh_remote_client.bulk_upload(local_files)
 
 
-def execute_command_on_remote(remote):
-    """Execute UNIX command on the remote host."""
-    remote.execute_commands(
+def execute_command_on_remote(ssh_remote_client: RemoteClient):
+    """
+    Execute UNIX command on the remote host.
+
+    :param ssh_remote_client: Remote server.
+    :type ssh_remote_client: RemoteClient
+    """
+    ssh_remote_client.execute_commands(
         [
             "cd /var/www/ && ls",
             "tail /var/log/nginx/access.log",

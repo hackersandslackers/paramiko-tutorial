@@ -30,7 +30,7 @@ class RemoteClient:
 
     @property
     def connection(self):
-        """Open connection to remote host. """
+        """Open connection to remote host."""
         try:
             client = SSHClient()
             client.load_system_host_keys()
@@ -113,4 +113,5 @@ class RemoteClient:
             stdout.channel.recv_exit_status()
             response = stdout.readlines()
             for line in response:
-                LOGGER.info(f"INPUT: {cmd} | OUTPUT: {line}")
+                LOGGER.trace(f"INPUT: {cmd}")
+                LOGGER.info(f"OUTPUT: {line}")

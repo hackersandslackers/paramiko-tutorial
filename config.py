@@ -6,23 +6,23 @@ from dotenv import load_dotenv
 from log import LOGGER
 
 # Load environment variables from .env
-basedir = path.abspath(path.dirname(__file__))
-load_dotenv(path.join(basedir, ".env"))
+BASE_DIR = path.abspath(path.dirname(__file__))
+load_dotenv(path.join(BASE_DIR, ".env"))
 
 # Read environment variables
-host = getenv("REMOTE_HOST")
-username = getenv("REMOTE_USERNAME")
-password = getenv("REMOTE_PASSWORD")
-ssh_key_filepath = getenv("SSH_KEY_FILEPATH")
-remote_path = getenv("REMOTE_PATH")
+ENVIRONMENT = getenv("ENVIRONMENT")
+SSH_REMOTE_HOST = getenv("SSH_REMOTE_HOST")
+SSH_USERNAME = getenv("SSH_USERNAME")
+SSH_PASSWORD = getenv("SSH_PASSWORD")
+SSH_KEY_FILEPATH = getenv("SSH_KEY_FILEPATH")
+SCP_DESTINATION_FOLDER = getenv("SCP_DESTINATION_FOLDER")
 config_values = [
-    {"host": host},
-    {"user": username},
-    {"password": password},
-    {"ssh": ssh_key_filepath},
-    {"path": remote_path},
+    {"host": SSH_REMOTE_HOST},
+    {"user": SSH_USERNAME},
+    {"password": SSH_PASSWORD},
+    {"ssh": SSH_KEY_FILEPATH},
+    {"path": SCP_DESTINATION_FOLDER},
 ]
-
 
 for config in config_values:
     if None in config.values():

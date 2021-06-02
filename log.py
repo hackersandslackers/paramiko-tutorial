@@ -33,7 +33,7 @@ def formatter(log: dict) -> str:
 
 
 def create_logger() -> custom_logger:
-    """Create custom LOGGER."""
+    """Create custom logger."""
     custom_logger.remove()
     custom_logger.add(stdout, colorize=True, format=formatter)
     return custom_logger
