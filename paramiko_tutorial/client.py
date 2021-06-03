@@ -30,7 +30,7 @@ class RemoteClient:
 
     @property
     def connection(self):
-        """Open connection to remote host."""
+        """Open SSH connection to remote host."""
         try:
             client = SSHClient()
             client.load_system_host_keys()
@@ -65,6 +65,9 @@ class RemoteClient:
             return self.ssh_key
         except SSHException as e:
             LOGGER.error(e)
+        except Exception as e:
+            LOGGER.error(f"Unexpected error occurred: {e}")
+            raise e
 
     def _upload_ssh_key(self):
         try:
@@ -74,6 +77,9 @@ class RemoteClient:
             LOGGER.info(f"{self.ssh_key_filepath} uploaded to {self.host}")
         except FileNotFoundError as error:
             LOGGER.error(error)
+        except Exception as e:
+            LOGGER.error(f"Unexpected error occurred: {e}")
+            raise e
 
     def disconnect(self):
         """Close SSH & SCP connection."""
