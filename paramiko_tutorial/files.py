@@ -2,7 +2,7 @@
 from os import walk
 from typing import List
 
-from config import BASE_DIR
+from config import LOCAL_FILE_DIRECTORY
 
 
 def fetch_local_files(local_file_dir: str) -> List[str]:
@@ -14,4 +14,4 @@ def fetch_local_files(local_file_dir: str) -> List[str]:
     """
     local_files = walk(local_file_dir)
     for root, dirs, files in local_files:
-        return [f"{BASE_DIR}/{root}/{file}" for file in files]
+        return [f"{LOCAL_FILE_DIRECTORY}/{file}" for file in files]

@@ -96,7 +96,7 @@ class RemoteClient:
         :type files: List[str]
         """
         try:
-            self.scp.put(files, remote_path=self.remote_path)
+            self.scp.put(files, remote_path=self.remote_path, recursive=True)
             LOGGER.info(
                 f"Finished uploading {len(files)} files to {self.remote_path} on {self.host}"
             )

@@ -6,9 +6,10 @@ from config import (
     SSH_REMOTE_HOST,
     SSH_USERNAME,
 )
-from paramiko_tutorial import main
+from paramiko_tutorial import initiate_client
 from paramiko_tutorial.client import RemoteClient
 
+# Create SSH remote client connection
 ssh_remote_client = RemoteClient(
     SSH_REMOTE_HOST,
     SSH_USERNAME,
@@ -18,4 +19,4 @@ ssh_remote_client = RemoteClient(
 )
 
 if __name__ == "__main__":
-    main(ssh_remote_client)
+    initiate_client(ssh_remote_client)

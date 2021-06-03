@@ -29,7 +29,7 @@ all help:
 
 .PHONY: run
 run:
-	$(VIRTUAL_ENVIRONMENT)/bin/python3 -m main.py
+	python3 main.py
 
 
 .PHONY: install
