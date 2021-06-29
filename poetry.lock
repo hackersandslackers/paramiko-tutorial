@@ -327,7 +327,7 @@ python-versions = "*"
 
 [[package]]
 name = "scp"
-version = "0.13.3"
+version = "0.13.5"
 description = "scp module for paramiko"
 category = "main"
 optional = false
@@ -599,8 +599,8 @@ regex = [
     {file = "regex-2021.4.4.tar.gz", hash = "sha256:52ba3d3f9b942c49d7e4bc105bb28551c44065f139a65062ab7912bef10c9afb"},
 ]
 scp = [
-    {file = "scp-0.13.3-py2.py3-none-any.whl", hash = "sha256:f2fa9fb269ead0f09b4e2ceb47621beb7000c135f272f6b70d3d9d29928d7bf0"},
-    {file = "scp-0.13.3.tar.gz", hash = "sha256:8bd748293d7362073169b96ce4b8c4f93bcc62cfc5f7e1d949e01e406a025bd4"},
+    {file = "scp-0.13.5-py2.py3-none-any.whl", hash = "sha256:be62d3ca534790dbaa509634fe28af6729f0d798388eaa5fdd3a1b191556dbde"},
+    {file = "scp-0.13.5.tar.gz", hash = "sha256:0ab2ee9178b8be53dc5c9fe2f33761e01a2435087f5c9fb5b54519873c650d60"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
