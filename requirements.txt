@@ -4,7 +4,7 @@ colorama==0.4.4; python_version >= "3.5" and python_full_version < "3.0.0" and s
 cryptography==3.4.7; python_version >= "3.6"
 loguru==0.5.3; python_version >= "3.5"
 paramiko==2.7.2
-pycparser==2.20; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
+pycparser==2.21; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
 pynacl==1.4.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
 python-dotenv==0.17.1
 scp==0.13.6
