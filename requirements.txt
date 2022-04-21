@@ -9,4 +9,4 @@ pynacl==1.4.0; python_version >= "2.7" and python_full_version < "3.0.0" or pyth
 python-dotenv==0.17.1
 scp==0.13.6
 six==1.16.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
-win32-setctime==1.0.3; sys_platform == "win32" and python_version >= "3.5"
+win32-setctime==1.1.0; sys_platform == "win32" and python_version >= "3.5"
