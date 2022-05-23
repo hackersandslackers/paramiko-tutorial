@@ -31,5 +31,5 @@ for config in SSH_CONFIG:
         LOGGER.warning(f"Config value not set: {config.popitem()}")
         raise Exception("Please set your environment variables via a `.env` file.")
 
-# Local file directory (no trailing slashes)
+# Local file directory
 LOCAL_FILE_DIRECTORY = f"{BASE_DIR}/files"

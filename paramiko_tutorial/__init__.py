@@ -27,7 +27,7 @@ def run():
     upload_files_to_remote(client)
     execute_command_on_remote(
         client,
-        commands=[
+        [
             "mkdir /uploads",
             "cd /uploads/ && ls",
         ],
@@ -44,7 +44,7 @@ def upload_files_to_remote(client: RemoteClient):
     client.bulk_upload(local_files)
 
 
-def execute_command_on_remote(client: RemoteClient, commands: List[str] = None):
+def execute_command_on_remote(client: RemoteClient, commands: List[str]):
     """
     Execute a UNIX command remotely on a given host.
 
