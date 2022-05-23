@@ -1,22 +1,32 @@
 """Perform tasks against a remote host."""
 from typing import List
 
-from config import LOCAL_FILE_DIRECTORY
+from config import (
+    LOCAL_FILE_DIRECTORY,
+    SCP_DESTINATION_FOLDER,
+    SSH_KEY_FILEPATH,
+    SSH_PASSWORD,
+    SSH_REMOTE_HOST,
+    SSH_USERNAME,
+)
+from paramiko_tutorial.server import RemoteClient
 
-from .client import RemoteClient
 from .files import fetch_local_files
+from .server import RemoteClient
 
 
-def initiate_client(ssh_remote_client: RemoteClient):
-    """
-    Initialize remote host client and execute actions.
-
-    :param ssh_remote_client: Remote server.
-    :type ssh_remote_client: RemoteClient
-    """
-    upload_files_to_remote(ssh_remote_client)
+def run():
+    """Initialize remote host client and execute actions."""
+    client = RemoteClient(
+        SSH_REMOTE_HOST,
+        SSH_USERNAME,
+        SSH_PASSWORD,
+        SSH_KEY_FILEPATH,
+        SCP_DESTINATION_FOLDER,
+    )
+    upload_files_to_remote(client)
     execute_command_on_remote(
-        ssh_remote_client,
+        client,
         commands=[
             "mkdir /uploads",
             "cd /uploads/ && ls",
@@ -24,26 +34,21 @@ def initiate_client(ssh_remote_client: RemoteClient):
     )
 
 
-def upload_files_to_remote(ssh_remote_client: RemoteClient):
+def upload_files_to_remote(client: RemoteClient):
     """
     Upload files to remote via SCP.
 
-    :param ssh_remote_client: Remote server.
-    :type ssh_remote_client: RemoteClient
+    :param RemoteClient client: Remote server client.
     """
     local_files = fetch_local_files(LOCAL_FILE_DIRECTORY)
-    ssh_remote_client.bulk_upload(local_files)
+    client.bulk_upload(local_files)
 
 
-def execute_command_on_remote(
-    ssh_remote_client: RemoteClient, commands: List[str] = None
-):
+def execute_command_on_remote(client: RemoteClient, commands: List[str] = None):
     """
-    Execute UNIX command on the remote host.
+    Execute a UNIX command remotely on a given host.
 
-    :param ssh_remote_client: Remote server.
-    :type ssh_remote_client: RemoteClient
-    :param commands: List of commands to run on remote host.
-    :type commands: List[str]
+    :param RemoteClient client: Remote server client.
+    :param List[str] commands: List of commands to run on remote host.
     """
-    ssh_remote_client.execute_commands(commands)
+    client.execute_commands(commands)

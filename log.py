@@ -6,10 +6,10 @@ from loguru import logger as custom_logger
 
 def log_formatter(record: dict) -> str:
     """
-    Formatter for `.log` records
+    Formatter for log records.
 
-    :param record: Log object containing log metadata & message.
-    :type record: dict
+    :param dict record: Log object containing log metadata & message.
+
     :returns: str
     """
     if record["level"].name == "TRACE":
@@ -28,7 +28,11 @@ def log_formatter(record: dict) -> str:
 
 
 def create_logger() -> custom_logger:
-    """Create custom logger."""
+    """
+    Create custom logger.
+
+    :returns: custom_logger
+    """
     custom_logger.remove()
     custom_logger.add(stdout, colorize=True, format=log_formatter)
     return custom_logger

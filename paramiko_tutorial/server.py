@@ -47,10 +47,8 @@ class RemoteClient:
             LOGGER.error(
                 f"AuthenticationException occurred; did you remember to generate an SSH key? {e}"
             )
-            raise e
         except Exception as e:
-            LOGGER.error(f"Unexpected error occurred: {e}")
-            raise e
+            LOGGER.error(f"Unexpected error occurred while connecting to host: {e}")
 
     @property
     def scp(self) -> SCPClient:
@@ -64,10 +62,9 @@ class RemoteClient:
             LOGGER.info(f"Found SSH key at self {self.ssh_key_filepath}")
             return self.ssh_key
         except SSHException as e:
-            LOGGER.error(e)
+            LOGGER.error(f"SSHException while getting SSH key: {e}")
         except Exception as e:
-            LOGGER.error(f"Unexpected error occurred: {e}")
-            raise e
+            LOGGER.error(f"Unexpected error while getting SSH key: {e}")
 
     def _upload_ssh_key(self):
         try:
@@ -75,11 +72,10 @@ class RemoteClient:
                 f"ssh-copy-id -i {self.ssh_key_filepath}.pub {self.user}@{self.host}>/dev/null 2>&1"
             )
             LOGGER.info(f"{self.ssh_key_filepath} uploaded to {self.host}")
-        except FileNotFoundError as error:
-            LOGGER.error(error)
+        except FileNotFoundError as e:
+            LOGGER.error(f"FileNotFoundError while uploading SSH key: {e}")
         except Exception as e:
-            LOGGER.error(f"Unexpected error occurred: {e}")
-            raise e
+            LOGGER.error(f"Unexpected error while uploading SSH key: {e}")
 
     def disconnect(self):
         """Close SSH & SCP connection."""
@@ -88,36 +84,42 @@ class RemoteClient:
         if self.scp:
             self.scp.close()
 
-    def bulk_upload(self, files: List[str]):
+    def bulk_upload(self, filepaths: List[str]):
         """
         Upload multiple files to a remote directory.
 
-        :param files: List of local files to be uploaded.
-        :type files: List[str]
+        :param List[str] filepaths: List of local files to be uploaded.
         """
         try:
-            self.scp.put(files, remote_path=self.remote_path, recursive=True)
+            self.scp.put(filepaths, remote_path=self.remote_path, recursive=True)
             LOGGER.info(
-                f"Finished uploading {len(files)} files to {self.remote_path} on {self.host}"
+                f"Finished uploading {len(filepaths)} files to {self.remote_path} on {self.host}"
             )
         except SCPException as e:
-            raise e
+            LOGGER.error(f"SCPException during bulk upload: {e}")
+        except Exception as e:
+            LOGGER.error(f"Unexpected exception during bulk upload: {e}")
 
-    def download_file(self, file: str):
-        """Download file from remote host."""
-        self.scp.get(file)
+    def download_file(self, filepath: str):
+        """
+        Download file from remote host.
+
+        :param str filepath: Path to file hosted on remote server to fetch.
+        """
+        self.scp.get(filepath)
 
     def execute_commands(self, commands: List[str]):
         """
         Execute multiple commands in succession.
 
-        :param commands: List of unix commands as strings.
-        :type commands: List[str]
+        :param List[str] commands: List of unix commands as strings.
         """
         for cmd in commands:
-            stdin, stdout, stderr = self.client.exec_command(cmd)
+            stdin, stdout, stderr = self.connection.exec_command(cmd)
             stdout.channel.recv_exit_status()
             response = stdout.readlines()
             for line in response:
-                LOGGER.trace(f"INPUT: {cmd}")
-                LOGGER.info(f"OUTPUT: {line}")
+                LOGGER.info(
+                    f"INPUT: {cmd}\n \
+                    OUTPUT: {line}"
+                )
