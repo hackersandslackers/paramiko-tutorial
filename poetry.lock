@@ -399,7 +399,7 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "scp"
-version = "0.14.5"
+version = "0.16.2"
 description = "scp module for paramiko"
 category = "main"
 optional = false
@@ -830,8 +830,8 @@ python-dotenv = [
     {file = "python_dotenv-0.20.0-py3-none-any.whl", hash = "sha256:d92a187be61fe482e4fd675b6d52200e7be63a12b724abbf931a40ce4fa92938"},
 ]
 scp = [
-    {file = "scp-0.14.5-py2.py3-none-any.whl", hash = "sha256:d224535dd8ed00294f52b0e0e18fde7a6fb7a3d06b97ede9e3f750fa7bf75c09"},
-    {file = "scp-0.14.5.tar.gz", hash = "sha256:64f0015899b3d212cb8088e7d40ebaf0686889ff0e243d5c1242efe8b50f053e"},
+    {file = "scp-0.16.2-py2.py3-none-any.whl", hash = "sha256:98d2e9ecdbe09e6bd41c22d6b69a93f203589a6590624685373e81f8bfdc60fd"},
+    {file = "scp-0.16.2.tar.gz", hash = "sha256:d049f9aa77db4042c44b922cecabe97ef0716fb334a95701d68d1c7991684fc2"},
 ]
 setuptools = [
     {file = "setuptools-68.2.2-py3-none-any.whl", hash = "sha256:b454a35605876da60632df1a60f736524eb73cc47bbc9f3f1ef1b644de74fd2a"},
